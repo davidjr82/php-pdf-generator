@@ -17,7 +17,7 @@ class PDFGeneratorTest extends TestCase
 
     public function test_default_exception()
     {
-        $exception = new PDFGeneratorException("Exception message");
-        $this->assertEquals("Exception message", $exception->getMessage());
+        $exception = new PDFGeneratorException("Exception message test");
+        $this->assertEquals("Exception message test", $exception->getMessage());
     }
 }
