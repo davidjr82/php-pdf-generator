@@ -1,0 +1,11 @@
+/.code_coverage
+/.code_metrics
+/.dev_resources
+/.vscode
+
+/node_modules
+/vendor
+
+composer.lock
+npm-debug.log
+yarn-error.log

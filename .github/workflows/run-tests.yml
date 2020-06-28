@@ -1,0 +1,43 @@
+name: Run tests
+
+on:
+  push:
+    branches: [ master, dev ]
+  pull_request:
+    branches: [ master, dev ]
+
+jobs:
+  run-tests:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        php: [ 7.4, 7.3, 7.2, 7.1 ]
+        dependency-version: [ prefer-lowest, prefer-stable ]        
+
+    name: ${{ matrix.os }} - PHP ${{ matrix.php }} - ${{ matrix.dependency-version }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+      
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v2
+      with:
+        path: vendor
+        key: ${{ matrix.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ matrix.os }}-php-
+          
+    - name: Install dependencies
+      if: steps.composer-cache.outputs.cache-hit != 'true'     
+      run: composer update --${{ matrix.dependency-version }} --prefer-dist --no-progress --no-interaction --no-suggest
+   
+    - name: Run test suite
+      run: composer run-script test
