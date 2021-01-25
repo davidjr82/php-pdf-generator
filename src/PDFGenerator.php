@@ -5,7 +5,7 @@ namespace Davidjr82\PhpPDFGenerator;
 use Davidjr82\PhpPDFGenerator\Concerns\HasDebug;
 use Davidjr82\PhpPDFGenerator\Concerns\HasCallbacks;
 use Davidjr82\PhpPDFGenerator\Concerns\HasResponses;
-use Davidjr82\PhpPDFGenerator\Engines\PDFLatexEngine;
+use Davidjr82\PhpPDFGenerator\Engines\XeLatexEngine;
 use Davidjr82\PhpPDFGenerator\Contracts\EngineInterface;
 use Davidjr82\PhpPDFGenerator\Exceptions\PDFGeneratorException;
 
@@ -24,7 +24,7 @@ class PDFGenerator
 
     public function __construct(?string $engine_class = null)
     {
-        $engine_class ??= PDFLatexEngine::class;
+        $engine_class ??= XeLatexEngine::class;
         $this->engine = new $engine_class();
     }
 
