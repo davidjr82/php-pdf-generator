@@ -19,6 +19,9 @@ class PDFGenerator
     private ?string $rendered_source = null;
     private string $tmp_source_filename;
 
+    // run twice to generate index pages
+    private int $run_times = 2;
+
     public function __construct(?string $engine_class = null)
     {
         $engine_class ??= PDFLatexEngine::class;
@@ -50,10 +53,17 @@ class PDFGenerator
         return $file_has_been_moved;
     }
 
+    public function setRunTImes(int $run_times): self
+    {
+        $this->run_times = max(1, $run_times);
+
+        return $this;
+    }
+
     private function generate(): string
     {
         if (null === $this->rendered_source) {
-            throw new PDFGeneratorException('The source file content (.tex, .md, ...) must be provided with ->setRenderedSource($text) method');
+            throw new PDFGeneratorException('The source file content (tex) must be provided with ->setRenderedSource($text) method');
         }
 
         $tmpfresource = tmpfile();
@@ -71,7 +81,10 @@ class PDFGenerator
         file_put_contents($this->tmp_source_filename, $this->rendered_source);
 
         $process = $this->engine->getProcess(\dirname($this->tmp_source_filename), $this->tmp_source_filename);
-        $process->run();
+
+        foreach(range(1, $this->run_times) as $run_iteration) {
+            $process->run();
+        }
 
         if (!$process->isSuccessful()) {
             return $this->parseError($process);
