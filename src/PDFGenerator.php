@@ -42,11 +42,11 @@ class PDFGenerator
         return $this->setRenderedSource($demo_source_text);
     }
 
-    public function saveFile(string $destination_path): bool
+    public function saveFile(string $destination_path, string $extension_type = '.pdf'): bool
     {
         $generated_file_path = $this->generate();
 
-        $file_has_been_moved = rename($generated_file_path, $destination_path);
+        $file_has_been_moved = rename($generated_file_path . $extension_type, $destination_path);
 
         $this->emitCallbacks($file_has_been_moved);
 
