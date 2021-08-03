@@ -22,6 +22,9 @@ class PDFGenerator
     // run twice to generate index pages
     private int $run_times = 2;
 
+    // custom environment variables
+    private array $env = [];
+
     public function __construct(?string $engine_class = null)
     {
         $engine_class ??= XeLatexEngine::class;
@@ -53,9 +56,16 @@ class PDFGenerator
         return $file_has_been_moved;
     }
 
-    public function setRunTImes(int $run_times): self
+    public function setRunTimes(int $run_times): self
     {
         $this->run_times = max(1, $run_times);
+
+        return $this;
+    }
+
+    public function setEnv(array $env): self
+    {
+        $this->env = array_merge($this->env, $env);
 
         return $this;
     }
@@ -82,8 +92,8 @@ class PDFGenerator
 
         $process = $this->engine->getProcess(\dirname($this->tmp_source_filename), $this->tmp_source_filename);
 
-        foreach(range(1, $this->run_times) as $run_iteration) {
-            $process->run();
+        foreach (range(1, $this->run_times) as $run_iteration) {
+            $process->run(null, $this->env);
         }
 
         if (!$process->isSuccessful()) {
@@ -105,7 +115,7 @@ class PDFGenerator
             throw new PDFGeneratorException($process->getOutput());
         }
 
-        if($this->debug) {
+        if ($this->debug) {
             return $this->showLogInBrowser($logfile);
         }
 
@@ -116,11 +126,11 @@ class PDFGenerator
 
     private function cleanup(): self
     {
-        if($this->debug) {
+        if ($this->debug) {
             return $this;
         }
 
-        if(!isset($this->tmp_source_filename) || empty($this->tmp_source_filename)) {
+        if (!isset($this->tmp_source_filename) || empty($this->tmp_source_filename)) {
             return $this;
         }
 
