@@ -6,10 +6,11 @@ use Davidjr82\PhpPDFGenerator\Concerns\HasDebug;
 use Davidjr82\PhpPDFGenerator\Concerns\HasCallbacks;
 use Davidjr82\PhpPDFGenerator\Concerns\HasResponses;
 use Davidjr82\PhpPDFGenerator\Engines\XeLatexEngine;
+use Davidjr82\PhpPDFGenerator\Contracts\PDFGenerator as PDFGeneratorContract;
 use Davidjr82\PhpPDFGenerator\Contracts\EngineInterface;
 use Davidjr82\PhpPDFGenerator\Exceptions\PDFGeneratorException;
 
-class PDFGenerator
+class PDFGenerator implements PDFGeneratorContract
 {
     use HasDebug;
     use HasCallbacks;
