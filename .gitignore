@@ -5,7 +5,9 @@
 
 /node_modules
 /vendor
+/.phpunit.cache
 
 composer.lock
 npm-debug.log
 yarn-error.log
+.phpunit.result.cache

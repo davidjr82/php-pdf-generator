@@ -2,8 +2,8 @@
 
 namespace Davidjr82\PhpPDFGenerator\Concerns;
 
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 trait HasDebug
 {
@@ -12,6 +12,7 @@ trait HasDebug
     public function setDebug(bool $debug): self
     {
         $this->debug = $debug;
+
         return $this;
     }
 
@@ -19,6 +20,7 @@ trait HasDebug
     {
         $response = new BinaryFileResponse($logfile, 200, ['Content-Type' => 'text/plain'], true, ResponseHeaderBag::DISPOSITION_INLINE);
         $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, basename($logfile));
+
         return $response->send();
     }
 }

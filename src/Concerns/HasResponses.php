@@ -9,11 +9,11 @@ trait HasResponses
 {
     protected function response($filetype, $disposition_type, $filename = null): BinaryFileResponse
     {
-        if(!isset($this->tmp_source_filename)) {
+        if (!isset($this->tmp_source_filename)) {
             $this->generate();
         }
 
-        $file_path =  $this->getFilePath($filetype, $this->tmp_source_filename);
+        $file_path = $this->getFilePath($filetype, $this->tmp_source_filename);
         $filename ??= basename($file_path);
 
         $response = new BinaryFileResponse($file_path, 200, ['Content-Type' => $this->getContentType($filetype)], true);
@@ -23,28 +23,28 @@ trait HasResponses
 
     private function getFilePath($filetype, $file_path): string
     {
-        if($filetype === 'tex') {
+        if ('tex' === $filetype) {
             return $file_path;
         }
 
-        if($filetype === 'pdf') {
+        if ('pdf' === $filetype) {
             return $file_path . '.pdf';
         }
 
-        if($filetype === 'log') {
+        if ('log' === $filetype) {
             return $file_path . '.log';
         }
 
-        if($filetype === 'aux') {
+        if ('aux' === $filetype) {
             return $file_path . '.aux';
         }
 
-        throw new Exception("Filetype not supported", 1);
+        throw new Exception('Filetype not supported', 1);
     }
 
     private function getContentType($filetype): string
     {
-        if($filetype === 'pdf') {
+        if ('pdf' === $filetype) {
             return 'application/pdf';
         }
 

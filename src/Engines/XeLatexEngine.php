@@ -14,7 +14,7 @@ class XeLatexEngine implements EngineInterface
 
     public function __construct()
     {
-        if (!\in_array(PHP_OS_FAMILY, ['Linux'])) {
+        if (!\in_array(\PHP_OS_FAMILY, ['Linux'])) {
             throw new UnsupportedOperatingSystemException();
         }
 
@@ -39,6 +39,6 @@ class XeLatexEngine implements EngineInterface
 
     public function getProcess($tmp_dir, $tmp_filename): Process
     {
-        return new Process([$this->bin_path, '-output-directory', $tmp_dir, $tmp_filename]);
+        return new Process([$this->bin_path, '-interaction=nonstopmode', '-no-shell-escape', '-output-directory', $tmp_dir, $tmp_filename]);
     }
 }

@@ -2,18 +2,18 @@
 
 namespace Davidjr82\PhpPDFGenerator;
 
-use Davidjr82\PhpPDFGenerator\Concerns\HasDebug;
 use Davidjr82\PhpPDFGenerator\Concerns\HasCallbacks;
+use Davidjr82\PhpPDFGenerator\Concerns\HasDebug;
 use Davidjr82\PhpPDFGenerator\Concerns\HasResponses;
-use Davidjr82\PhpPDFGenerator\Engines\XeLatexEngine;
-use Davidjr82\PhpPDFGenerator\Contracts\PDFGenerator as PDFGeneratorContract;
 use Davidjr82\PhpPDFGenerator\Contracts\EngineInterface;
+use Davidjr82\PhpPDFGenerator\Contracts\PDFGenerator as PDFGeneratorContract;
+use Davidjr82\PhpPDFGenerator\Engines\XeLatexEngine;
 use Davidjr82\PhpPDFGenerator\Exceptions\PDFGeneratorException;
 
 class PDFGenerator implements PDFGeneratorContract
 {
-    use HasDebug;
     use HasCallbacks;
+    use HasDebug;
     use HasResponses;
 
     private EngineInterface $engine;
@@ -26,7 +26,7 @@ class PDFGenerator implements PDFGeneratorContract
     // custom environment variables
     private array $env = [];
 
-    public function __construct(?string $engine_class = null)
+    public function __construct(string $engine_class = null)
     {
         $engine_class ??= XeLatexEngine::class;
         $this->engine = new $engine_class();
@@ -92,6 +92,7 @@ class PDFGenerator implements PDFGeneratorContract
         file_put_contents($this->tmp_source_filename, $this->rendered_source);
 
         $process = $this->engine->getProcess(\dirname($this->tmp_source_filename), $this->tmp_source_filename);
+        $process->setPty(true);
 
         foreach (range(1, $this->run_times) as $run_iteration) {
             $process->run(null, $this->env);
@@ -122,7 +123,7 @@ class PDFGenerator implements PDFGeneratorContract
 
         $log_contents = file_get_contents($logfile);
         $this->cleanup();
-        throw new PDFGeneratorException("Error. To see logfile directly in the browser use ->setDebug(true) method. Logfile contents: " . $log_contents);
+        throw new PDFGeneratorException('Error. To see logfile directly in the browser use ->setDebug(true) method. Logfile contents: ' . $log_contents);
     }
 
     private function cleanup(): self
@@ -136,11 +137,11 @@ class PDFGenerator implements PDFGeneratorContract
         }
 
         return $this
-                ->deleteFile($this->tmp_source_filename)
-                ->deleteFile($this->tmp_source_filename . '.pdf')
-                ->deleteFile($this->tmp_source_filename . '.out')
-                ->deleteFile($this->tmp_source_filename . '.aux')
-                ->deleteFile($this->tmp_source_filename . '.log');
+            ->deleteFile($this->tmp_source_filename)
+            ->deleteFile($this->tmp_source_filename . '.pdf')
+            ->deleteFile($this->tmp_source_filename . '.out')
+            ->deleteFile($this->tmp_source_filename . '.aux')
+            ->deleteFile($this->tmp_source_filename . '.log');
     }
 
     private function deleteFile($path): self

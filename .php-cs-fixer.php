@@ -1,8 +1,5 @@
 <?php
 
-use PhpCsFixer\Config;
-use PhpCsFixer\Finder;
-
 $rules = [
     '@Symfony' => true,
     '@Symfony:risky' => true,
@@ -16,7 +13,7 @@ $rules = [
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__);
 
-$config = PhpCsFixer\Config::create()
+$config = (new PhpCsFixer\Config())
     ->setFinder($finder)
     ->setRules($rules)
     ->setRiskyAllowed(true);

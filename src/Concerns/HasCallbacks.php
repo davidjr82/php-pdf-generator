@@ -7,7 +7,6 @@ trait HasCallbacks
     protected array $callback_success = [];
     protected array $callback_error = [];
 
-
     protected function emitCallbacks(bool $result)
     {
         $callbacks = $result ? $this->callback_success : $this->callback_error;
@@ -17,7 +16,5 @@ trait HasCallbacks
                 \call_user_func($callback);
             }
         }
-
     }
-
 }

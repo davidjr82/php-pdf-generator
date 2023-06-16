@@ -2,9 +2,7 @@
 
 namespace Davidjr82\PhpPDFGenerator\Exceptions;
 
-use Exception;
-
-class UnsupportedOperatingSystemException extends Exception
+class UnsupportedOperatingSystemException extends \Exception
 {
     public function __construct()
     {
